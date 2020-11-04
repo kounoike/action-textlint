@@ -14,7 +14,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"         \
         -level="${INPUT_LEVEL}"                         \
         ${INPUT_REVIEWDOG_FLAGS} || \
-        [ "${INPUT_REPORTER}" != "github-pr-review" -a "${INPUT_FAIL_ON_ERROR}" = "true" ] && exit 1 )
+        ( [ "${INPUT_REPORTER}" != "github-pr-review" -a "${INPUT_FAIL_ON_ERROR}" = "true" ] && exit 1 )
 
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
