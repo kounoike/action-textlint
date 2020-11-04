@@ -1,5 +1,13 @@
 #!/bin/sh
 
+set -xe
+
+TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
+
+if [ -f "${TARGET_TEXTLINTRC}" ]; then
+  node configloader.js | xargs npm install
+fi
+
 TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
 
 cd "$GITHUB_WORKSPACE" || true
@@ -13,8 +21,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
         -filter-mode="${INPUT_FILTER_MODE}"             \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"         \
         -level="${INPUT_LEVEL}"                         \
-        ${INPUT_REVIEWDOG_FLAGS} || \
-        ( [ "${INPUT_REPORTER}" != "github-pr-review" -a "${INPUT_FAIL_ON_ERROR}" = "true" ] && exit 1 )
+        ${INPUT_REVIEWDOG_FLAGS}
 
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
