@@ -1,20 +1,36 @@
 #!/bin/sh
 
-set -xe
+cd "$GITHUB_WORKSPACE" || true
 
-TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
-
-if [ -f "${TARGET_TEXTLINTRC}" ]; then
-  ( cd /textlint; node configloader.js | xargs npm install )
+# setup and check.
+if [ -x "./node_modules/.bin/textlint"  ]; then
+  # pass
+  :
+elif [ -f "./package.json" ] && grep -q "textlint" "./package.json"; then
+  npm ci
 fi
 
-TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
+if [ -x "./node_modules/.bin/textlint"  ]; then
+  TEXTLINT_BIN="$(pwd)/node_modules/.bin/textlint"
+else
+  echo "This repository was not configured for textlint, using pre-installed textlint"
+  TEXTLINT_BIN=/textlint/node_modules/.bin/textlint
+  TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
 
-cd "$GITHUB_WORKSPACE" || true
+  if [ -f "${TARGET_TEXTLINTRC}" ]; then
+    pushd /textlint
+    node configloader.js | xargs npm install
+    popd
+  fi
+
+  exit 1
+fi
+
+"$TEXTLINT_BIN" --version
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-"$TEXT_LINT_BIN" -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
+"$TEXTLINT_BIN" -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
       | reviewdog -f=checkstyle                         \
         -name="${INPUT_TOOL_NAME}"                      \
         -reporter="${INPUT_REPORTER:-github-pr-review}" \
@@ -26,7 +42,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
   # fix
-  "$TEXT_LINT_BIN" --fix "${INPUT_TEXTLINT_FLAGS:-.}" || true
+  "$TEXTLINT_BIN" --fix "${INPUT_TEXTLINT_FLAGS:-.}" || true
 
   TMPFILE=$(mktemp)
   git diff >"${TMPFILE}"
