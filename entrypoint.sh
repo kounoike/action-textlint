@@ -20,8 +20,6 @@ else
   if [ -f "${TARGET_TEXTLINTRC}" ]; then
     (cd /textlint; node configloader.js | xargs npm install)
   fi
-
-  exit 1
 fi
 
 "$TEXTLINT_BIN" --version
