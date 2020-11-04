@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
 
 cd "$GITHUB_WORKSPACE" || true
