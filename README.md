@@ -58,7 +58,10 @@ textlint arguments (i.e. target dir:`doc/*`)
 ## Customizes
 
 `.textlintrc` put in your repo.
-And need textlint included in project package.json .
+~~And need textlint included in project package.json .~~
+(Updated) If you use textlint in your repository (textlint exists in package.json), the action use it.
+Otherwise the action use own textlint. Of cause, plugins/rules in `.textlintrc` are automatically installed.
+In this case, automatically installed packages are located in `/textlint/node_modules`.
 
 ## Example usage
 
