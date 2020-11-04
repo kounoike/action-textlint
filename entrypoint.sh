@@ -1,25 +1,12 @@
 #!/bin/sh
 
+TEXT_LINT_BIN=$(pwd)/node_modules/.bin/textlint
+
 cd "$GITHUB_WORKSPACE" || true
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-# setup and check.
-if [ -x "./node_modules/.bin/textlint"  ]; then
-  # pass
-  :
-else
-  npm ci
-fi
-
-if [ -x "./node_modules/.bin/textlint"  ]; then
-  npx textlint --version
-else
-  echo This repository was not configured for textlint, process done.
-  exit 1
-fi
-
-npx textlint -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
+"$TEXT_LINT_BIN" -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
       | reviewdog -f=checkstyle                         \
         -name="${INPUT_TOOL_NAME}"                      \
         -reporter="${INPUT_REPORTER:-github-pr-review}" \
@@ -31,7 +18,7 @@ npx textlint -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
   # fix
-  npx textlint --fix "${INPUT_TEXTLINT_FLAGS:-.}" || true
+  "$TEXT_LINT_BIN" --fix "${INPUT_TEXTLINT_FLAGS:-.}" || true
 
   TMPFILE=$(mktemp)
   git diff >"${TMPFILE}"

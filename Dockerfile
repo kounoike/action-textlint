@@ -8,6 +8,10 @@ RUN apk --update add git && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/*
 
-COPY entrypoint.sh /entrypoint.sh
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY prh.yml prh-rules/ ./
+COPY entrypoint.sh ./
+RUN npm ci
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
