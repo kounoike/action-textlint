@@ -9,7 +9,7 @@ RUN apk --update add git && \
     rm /var/cache/apk/*
 
 WORKDIR /textlint
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json configloader.js ./
 COPY prh.yml prh-rules/ ./
 COPY entrypoint.sh ./
 RUN npm ci

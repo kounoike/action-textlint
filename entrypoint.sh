@@ -5,7 +5,7 @@ set -xe
 TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
 
 if [ -f "${TARGET_TEXTLINTRC}" ]; then
-  node configloader.js | xargs npm install
+  node /textlint/configloader.js | xargs npm install
 fi
 
 TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
