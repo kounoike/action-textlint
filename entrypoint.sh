@@ -1,6 +1,6 @@
 #!/bin/sh
-
-cd "$GITHUB_WORKSPACE" || true
+{
+TEXTLINT_TARGET_DIR = $(cd "{$GITHUB_WORKSPACE}" && cd "${INPUT_TARGET_DIR:-.}" && pwd) 
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
@@ -19,14 +19,14 @@ else
   exit 1
 fi
 
-npx textlint -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
-      | reviewdog -f=checkstyle                         \
+npx textlint -f checkstyle ${INPUT_TEXTLINT_FLAGS} "${INPUT_TEXTLINT_DIR}" \
+      | (cd "$GITHUB_WORKSPACE" && reviewdog -f=checkstyle                 \
         -name="${INPUT_TOOL_NAME}"                      \
         -reporter="${INPUT_REPORTER:-github-pr-review}" \
         -filter-mode="${INPUT_FILTER_MODE}"             \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"         \
         -level="${INPUT_LEVEL}"                         \
-        ${INPUT_REVIEWDOG_FLAGS}
+        ${INPUT_REVIEWDOG_FLAGS} )
 
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then

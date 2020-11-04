@@ -29,7 +29,11 @@ inputs:
     description: 'Additional reviewdog flags'
     default: ''
   textlint_flags:
-    description: "flags and args of textlint command. Default: '.'"
+    description: "flags of textlint command, except target directory. Default: ''"
+    required: false
+    default: ''
+  target_dir:
+    description: "directory for checked by textlint. Default: '.'"
     required: true
     default: '.'
   tool_name:
