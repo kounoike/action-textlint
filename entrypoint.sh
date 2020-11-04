@@ -1,5 +1,4 @@
 #!/bin/sh
-{
 TEXTLINT_TARGET_DIR = $(cd "{$GITHUB_WORKSPACE}" && cd "${INPUT_TARGET_DIR:-.}" && pwd) 
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
