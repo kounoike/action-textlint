@@ -8,10 +8,10 @@ RUN apk --update add git && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/*
 
-WORKDIR /app
+WORKDIR /textlint
 COPY package.json package-lock.json ./
 COPY prh.yml prh-rules/ ./
 COPY entrypoint.sh ./
 RUN npm ci
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/textlint/entrypoint.sh"]

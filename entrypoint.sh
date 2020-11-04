@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TEXT_LINT_BIN=$(pwd)/node_modules/.bin/textlint
+TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
 
 cd "$GITHUB_WORKSPACE" || true
 
