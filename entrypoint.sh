@@ -22,6 +22,7 @@ else
   fi
 fi
 
+echo -n "textlint version: "
 "$TEXTLINT_BIN" --version
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
