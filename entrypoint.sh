@@ -1,12 +1,14 @@
 #!/bin/sh
 
-set -x
+set -xe
 
 TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
 
 cd "$GITHUB_WORKSPACE" || true
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
+
+ls -l
 
 "$TEXT_LINT_BIN" "${INPUT_TEXTLINT_FLAGS}"
 
