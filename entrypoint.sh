@@ -18,9 +18,7 @@ else
   TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
 
   if [ -f "${TARGET_TEXTLINTRC}" ]; then
-    pushd /textlint
-    node configloader.js | xargs npm install
-    popd
+    (cd /textlint; node configloader.js | xargs npm install)
   fi
 
   exit 1
