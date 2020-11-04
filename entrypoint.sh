@@ -1,16 +1,10 @@
 #!/bin/sh
 
-set -xe
-
 TEXT_LINT_BIN=/textlint/node_modules/.bin/textlint
 
 cd "$GITHUB_WORKSPACE" || true
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
-
-ls -la
-
-"$TEXT_LINT_BIN" "${INPUT_TEXTLINT_FLAGS}"
 
 "$TEXT_LINT_BIN" -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
       | reviewdog -f=checkstyle                         \
@@ -19,7 +13,8 @@ ls -la
         -filter-mode="${INPUT_FILTER_MODE}"             \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"         \
         -level="${INPUT_LEVEL}"                         \
-        ${INPUT_REVIEWDOG_FLAGS}
+        ${INPUT_REVIEWDOG_FLAGS} || \
+        [ "${INPUT_REPORTER}" != "github-pr-review" -a "${INPUT_FAIL_ON_ERROR}" = "true" ] && exit 1 )
 
 # github-pr-review only diff adding
 if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
