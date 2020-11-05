@@ -29,9 +29,9 @@ echo -n "textlint version: "
 "$TEXTLINT_BIN" --version
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
+BEFORE_SHA=$(jq -r '.before' $GITHUB_EVENT_PATH)
 
-cat $GITHUB_EVENT_PATH
-(git diff --name-only HEAD^ | xargs "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}") | tee rd.jsonl
+(git diff --name-only "${BEFORE_SHA}" | xargs "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}") | tee rd.jsonl
 cat rd.jsonl \
       | reviewdog -f=rdjsonl                            \
         -name="${INPUT_TOOL_NAME}"                      \
