@@ -8,6 +8,7 @@ if [ -x "./node_modules/.bin/textlint"  ]; then
   :
 elif [ -f "./package.json" ] && grep -q "textlint" "./package.json"; then
   npm ci
+  npm ls @kounoike/textlint-formatter-rdjsonl || npm install @kounoike/textlint-formatter-rdjsonl
 fi
 
 if [ -x "./node_modules/.bin/textlint"  ]; then
@@ -27,35 +28,13 @@ echo -n "textlint version: "
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-"$TEXTLINT_BIN" -f checkstyle "${INPUT_TEXTLINT_FLAGS}"    \
-      | reviewdog -f=checkstyle                         \
+"$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}"    \
+      | reviewdog -f=rdjsonl                            \
         -name="${INPUT_TOOL_NAME}"                      \
         -reporter="${INPUT_REPORTER:-github-pr-review}" \
         -filter-mode="${INPUT_FILTER_MODE}"             \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"         \
         -level="${INPUT_LEVEL}"                         \
-        ${INPUT_REVIEWDOG_FLAGS}
-
-# github-pr-review only diff adding
-if [ "${INPUT_REPORTER}" = "github-pr-review" ]; then
-  # fix
-  "$TEXTLINT_BIN" --fix "${INPUT_TEXTLINT_FLAGS:-.}" || true
-
-  TMPFILE=$(mktemp)
-  git diff >"${TMPFILE}"
-
-  reviewdog                        \
-    -name="textlint-fix"           \
-    -f=diff                        \
-    -f.diff.strip=1                \
-    -name="${INPUT_TOOL_NAME}-fix" \
-    -reporter="github-pr-review"   \
-    -filter-mode="diff_context"    \
-    -level="${INPUT_LEVEL}"        \
-    ${INPUT_REVIEWDOG_FLAGS} < "${TMPFILE}"
-
-  git restore . || true
-  rm -f "${TMPFILE}"
-fi
+        ${INPUT_REVIEWDOG_FLAGS} || exit $?
 
 # EOF

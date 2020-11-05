@@ -25,6 +25,7 @@
   "homepage": "https://github.com/tsuyoshicho/action-textlint#readme",
   "devDependencies": {},
   "dependencies": {
+    "@kounoike/textlint-formatter-rdjsonl": "0.0.4",
     "textlint": "11.7.6",
     "textlint-rule-preset-ja-technical-writing": "4.0.1",
     "textlint-rule-prh": "5.3.0",
