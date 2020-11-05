@@ -30,6 +30,7 @@ echo -n "textlint version: "
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 BEFORE_SHA=$(jq -r '.before' $GITHUB_EVENT_PATH)
+git log
 
 (git diff --name-only "${BEFORE_SHA}" | xargs "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}") | tee rd.jsonl
 cat rd.jsonl \
