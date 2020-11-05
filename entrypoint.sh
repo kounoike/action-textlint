@@ -27,8 +27,7 @@ echo -n "textlint version: "
 "$TEXTLINT_BIN" --version
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
-"$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}" | tee rd.jsonl
-cat rd.jsonl \
+"$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}" \
       | reviewdog -f=rdjsonl                            \
         -name="${INPUT_TOOL_NAME}"                      \
         -reporter="${INPUT_REPORTER:-github-pr-review}" \
