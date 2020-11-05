@@ -34,6 +34,9 @@ PR_NO=$(jq -r '.number' $GITHUB_EVENT_PATH)
 git fetch origin "refs/pull/${PR_NO}/head"
 
 git diff --name-only FETCH_HEAD HEAD | tee diff-files.txt
+sleep 1
+cat diff-files.txt
+
 cat diff-files.txt | xargs -n 10 "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}" | tee rd.jsonl
 cat rd.jsonl \
       | reviewdog -f=rdjsonl                            \
