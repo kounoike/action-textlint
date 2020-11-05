@@ -33,7 +33,7 @@ jq . $GITHUB_EVENT_PATH
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 PR_NO=$(jq -r '.number' $GITHUB_EVENT_PATH)
 
-git fetch origin "refs/pull/${PR_NO}/head"
+# git fetch origin "refs/pull/${PR_NO}/head"
 
 (git diff --name-only "refs/pull/${PR_NO}/head" HEAD | xargs "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}") | tee rd.jsonl
 cat rd.jsonl \
