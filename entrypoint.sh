@@ -19,12 +19,14 @@ else
   TARGET_TEXTLINTRC="$GITHUB_WORKSPACE/.textlintrc"
 
   if [ -f "${TARGET_TEXTLINTRC}" ]; then
-    (cd /textlint; node configloader.js | xargs npm install)
+    cd /textlint
+    node configloader.js | xargs npm install
+    cd "$GITHUB_WORKSPACE" || true
   fi
 fi
 
 echo -n "textlint version: "
-"$TEXTLINT_BIN" --version
+"$TEXTLINT_BIN" --version || exit 1
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}" \
