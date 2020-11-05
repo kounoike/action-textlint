@@ -30,6 +30,7 @@ echo -n "textlint version: "
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
+pwd
 (git diff --name-only HEAD^ | xargs "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}") | tee rd.jsonl
 cat rd.jsonl \
       | reviewdog -f=rdjsonl                            \
