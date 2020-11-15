@@ -10,7 +10,6 @@ RUN apk --update add git jq && \
 
 WORKDIR /textlint
 COPY package.json package-lock.json configloader.js ./
-COPY prh.yml prh-rules/ ./
 COPY entrypoint.sh ./
 RUN npm ci
 
