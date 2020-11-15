@@ -5,17 +5,15 @@ result = rcFile.rcFile("textlint", {
 });
 
 if (result.config.plugins) {
-    for (const [key, value] of Object.entries(result.config.plugins)) {
-        if (value != false) {
-            if (key.startsWith("@")) {
-                const scope = key.slice(0, key.indexOf("/"));
-                const name = key.slice(key.indexOf('/') + 1);
-                console.log(`${scope}/textlint-plugin-${name}`);
-            } else {
-                console.log(`textlint-plugin-${key}`);
-            }
-        }
+  result.config.plugins.forEach(key => {
+    if (key.startsWith("@")) {
+      const scope = key.slice(0, key.indexOf("/"));
+      const name = key.slice(key.indexOf('/') + 1);
+      console.log(`${scope}/textlint-plugin-${name}`);
+    } else {
+      console.log(`textlint-plugin-${key}`);
     }
+  });
 }
 
 if (result.config.rules) {
