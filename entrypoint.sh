@@ -22,7 +22,7 @@ else
 
   if [ -f "${TARGET_TEXTLINTRC}" ]; then
     cd /textlint
-    node configloader.js | xargs npm install
+    node configloader.js | xargs -r -n 20 npm install
     cd "$GITHUB_WORKSPACE" || true
   fi
 fi
