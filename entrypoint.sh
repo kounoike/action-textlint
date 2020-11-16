@@ -30,6 +30,8 @@ fi
 echo -n "textlint version: "
 "$TEXTLINT_BIN" --version || exit 1
 
+"$TEXTLINT_BIN" "${INPUT_TEXTLINT_FLAGS}"
+
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 "$TEXTLINT_BIN" -f @kounoike/textlint-formatter-rdjsonl "${INPUT_TEXTLINT_FLAGS}" | tee reviewdog.jsonl
 cat reviewdog.jsonl \
